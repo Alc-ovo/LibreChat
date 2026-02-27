@@ -2928,119 +2928,75 @@ html {
 }
 
 
-/* =========================================================
-   LibreChat PWA 专属定制：极简风 (防更新覆盖版)
-   ========================================================= */
+/* =========================================
+   LibreChat ui补丁
+   ========================================= */
 
+/* 1. 抹杀所有原生的绿色高亮和刺眼的焦点框 */
+* {
+    --tw-ring-color: transparent !important;
+    --tw-ring-offset-shadow: 0 0 #0000 !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+    outline: none !important;
+}
+
+/* 2. 强制应用酒馆【红绿灯(黑夜版)】核心色调 */
 :root {
-  /* 提取自你酒馆的灵魂配色 */
-  --lc-main-bg: #1a1a1a;            /* 纯净暗色背景 */
-  --lc-panel-bg: #242424;           /* 面板/代码块背景 */
-  --lc-green: #626C3A;              /* 幽灵绿/AI边框 */
-  --lc-yellow: #B8860B;             /* 警示黄/User边框 */
-  --lc-red: #A70C0C;                /* 强调红 */
-  --lc-border: #454545;             /* 基础虚线颜色 */
-  --lc-font: "Microsoft Yahei", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --st-bg-color: #1d2128;          /* 你的模糊色调背景 */
+    --st-text-main: #b7b7aa;         /* 主文字颜色 */
+    --st-border-user: #656565;       /* 你设定的深黄色替代 */
+    --st-border-bot: #684545;        /* 你的下划线文本红色 */
+    --st-accent-green: #a9a589;      /* 你的引用文本绿色 */
 }
 
-/* === 1. 全局字体与呼吸感排版 === */
-body, .prose, [data-testid^="message"] {
-  font-family: var(--lc-font) !important;
-  line-height: 1.8 !important;       /* 极其舒适的宽行距 */
-  letter-spacing: 0.03em !important; /* 轻微拉开字距 */
-  font-size: 15px !important;        /* 适合手机阅读的字号 */
+/* 强制修改应用全局背景和文字颜色 */
+body, #root, .dark, .dark .bg-gray-800, .dark .bg-gray-900, .dark .bg-gray-950, [data-theme='dark'] {
+    background-color: var(--st-bg-color) !important;
+    color: var(--st-text-main) !important;
 }
 
-/* 隐藏主界面的多余背景渐变，保持极简纯色 */
-body {
-  background: var(--lc-main-bg) !important;
-  background-color: var(--lc-main-bg) !important;
+/* 3. 气泡大改造：引入虚线边框与酒馆布局 */
+/* 隐藏原生头像，因为酒馆风不需要这种圆角小头像 */
+.group .w-8.h-8.rounded-sm {
+    display: none !important;
 }
 
-/* === 2. 消息气泡：虚线手账质感 === */
-/* User 消息框 (黄色虚线 + 左侧实线) */
-div[data-testid*="user-message"] > div,
-.group\/message:nth-child(odd) > div {
-  border: 1px dashed var(--lc-yellow) !important;
-  border-left: 4px solid var(--lc-yellow) !important;
-  background-color: transparent !important;
-  border-radius: 8px !important;
-  margin: 12px 6px !important;
-  padding: 12px !important;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+/* 消息气泡底色和边框改造 */
+.dark .dark\:bg-gray-800, .dark .group.bg-gray-950 {
+    background-color: transparent !important;
+    border: 1px dashed rgba(100, 91, 91, 0.62) !important; /* 你的阴影颜色作为虚线 */
+    border-radius: 4px !important;
+    margin-bottom: 8px !important;
 }
 
-/* AI 消息框 (绿色虚线 + 左侧实线 + 浅绿底色) */
-div[data-testid*="ai-message"] > div,
-.group\/message:nth-child(even) > div {
-  border: 1px dashed var(--lc-green) !important;
-  border-left: 4px solid var(--lc-green) !important;
-  background-color: rgba(98, 108, 58, 0.05) !important; 
-  border-radius: 8px !important;
-  margin: 12px 6px !important;
-  padding: 12px !important;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+/* 区分用户和 AI 消息的边框（还原你 JSON 里的设计） */
+/* AI 消息左侧加粗暗红边框 */
+div[data-message-author-role="assistant"] {
+    border-left: 3px solid var(--st-border-bot) !important;
+}
+/* 用户消息左侧加粗暗黄边框 */
+div[data-message-author-role="user"] {
+    border-left: 3px solid var(--st-border-user) !important;
 }
 
-/* === 3. 头像：小巧、正圆、带边框 === */
-/* 强制覆盖所有的头像样式 */
-img[alt*="avatar"], 
-div[data-testid*="avatar"], 
-.rounded-sm, .rounded-md {
-  border-radius: 50% !important;     /* 必须是正圆 */
-  width: 32px !important;            /* 缩小到 32px，省屏幕空间 */
-  height: 32px !important;
-  min-width: 32px !important;
-  min-height: 32px !important;
-  border: 1.5px solid var(--lc-green) !important;
-  object-fit: cover !important;
-  padding: 0 !important;
+/* 4. 隐藏顶部多余按钮（书签、预设等） */
+/* 针对模型选择器右侧的按钮组进行精准打击 */
+.flex.items-center.justify-center.gap-1 > button[type="button"],
+.flex.items-center.gap-2 > button[aria-haspopup="dialog"],
+[data-testid="bookmarks-button"],
+[data-testid="presets-button"] {
+    display: none !important;
 }
 
-/* === 4. 输入框：统一虚线风格 === */
-#prompt-textarea, 
-textarea {
-  border: 1px dashed var(--lc-green) !important;
-  background-color: var(--lc-panel-bg) !important;
-  border-radius: 12px !important;
-  padding: 12px 16px !important;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important;
+/* 隐藏输入框内部烦人的加号等小工具（保留发送键） */
+.absolute.bottom-0.left-0.w-full form > div > div > button:not([data-testid="send-button"]) {
+    opacity: 0.2 !important; /* 不完全隐藏，降低透明度防误触，如果你想彻底隐藏改成 display: none */
 }
 
-/* 输入框外围容器去除边框 */
-form div.relative.flex.w-full.grow {
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
-
-/* === 5. 代码块：延续酒馆的 dashed 风格 === */
-pre, code, .hljs {
-  border: 1px dashed var(--lc-border) !important;
-  background-color: var(--lc-panel-bg) !important;
-  border-radius: 6px !important;
-}
-
-/* === 6. 视觉减法：淡化烦人的按钮 === */
-/* 消息底部的编辑/复制/重试按钮群，平时变成幽灵状态，点按时才变亮 */
-.text-gray-400, 
-.text-gray-500, 
-button[aria-label="Copy"],
-button[aria-label="Edit"],
-button[aria-label="Regenerate"] {
-  opacity: 0.15 !important; 
-  transition: opacity 0.3s ease !important;
-}
-
-/* 悬停或点击时恢复可见 */
-.group:hover .text-gray-400,
-.group:hover .text-gray-500,
-button[aria-label="Copy"]:active,
-button[aria-label="Edit"]:active {
-  opacity: 1 !important;
-}
-
-/* 彻底隐藏一些多余的标签（比如底部冗长的模型免责声明） */
-.text-xs.text-center {
-  display: none !important;
+/* 5. 输入框外观改造 */
+.dark textarea {
+    background-color: rgba(29, 33, 40, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.93) !important;
+    color: var(--st-text-main) !important;
+    border-radius: 4px !important;
 }
