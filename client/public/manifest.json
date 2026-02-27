@@ -1,0 +1,8 @@
+{
+  "name": "LibreChat",
+  "short_name": "LibreChat",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1d2128",
+  "theme_color": "#1d2128"
+}

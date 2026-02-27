@@ -2948,3 +2948,36 @@ body.zen-mode .flex.items-center.justify-center.gap-1 > button:not([role="combob
 body.zen-mode .flex-wrap.items-center.justify-center.gap-1 > button:not([role="combobox"]) {
     display: none !important;
 }
+/* === RP 沉浸式阅读体验：字体、行距、字间距微调 === */
+.mes_text, .whitespace-pre-wrap {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif !important; /* 使用酒馆常用的雅黑/苹方 */
+    line-height: 1.8 !important;   /* 拉大行距，阅读不累 */
+    font-size: 15.5px !important;  /* 稍微放大字体 */
+    letter-spacing: 0.5px !important; /* 增加一点字间距 */
+    color: var(--st-text-main) !important;
+}
+
+/* === 终极 Zen Mode 镇压：连窝端掉那个加号和残留按钮 === */
+/* 直接隐藏 header 右侧的整个快捷操作区 */
+body.zen-mode header .flex.items-center.justify-end,
+body.zen-mode header .flex.items-center.gap-1,
+body.zen-mode header .flex-wrap.items-center.gap-1 {
+    display: none !important;
+}
+
+/* 强杀任何带有 lucide-plus (加号) 的按钮 */
+body.zen-mode header svg.lucide-plus,
+body.zen-mode header button:has(svg.lucide-plus) {
+    display: none !important;
+}
+/* === 精准狙击：隐藏模型选择器旁边的加号 (+) === */
+body.zen-mode .sticky.top-0 button:has(svg.lucide-plus),
+body.zen-mode header button:has(svg.lucide-plus),
+body.zen-mode [aria-label="New Chat"] {
+    display: none !important;
+}
+
+/* 补充：连带隐藏那个占据空间的透明框 */
+body.zen-mode header .flex.items-center.gap-1 > button {
+    display: none !important;
+}
