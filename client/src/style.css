@@ -2928,11 +2928,7 @@ html {
 }
 
 
-/* =========================================
-   LibreChat ui补丁
-   ========================================= */
-
-/* 1. 抹杀所有原生的绿色高亮和刺眼的焦点框 */
+/* === 1. 抹杀所有原生焦点绿光 (永久生效) === */
 * {
     --tw-ring-color: transparent !important;
     --tw-ring-offset-shadow: 0 0 #0000 !important;
@@ -2940,63 +2936,15 @@ html {
     outline: none !important;
 }
 
-/* 2. 强制应用酒馆【红绿灯(黑夜版)】核心色调 */
-:root {
-    --st-bg-color: #1d2128;          /* 你的模糊色调背景 */
-    --st-text-main: #b7b7aa;         /* 主文字颜色 */
-    --st-border-user: #656565;       /* 你设定的深黄色替代 */
-    --st-border-bot: #684545;        /* 你的下划线文本红色 */
-    --st-accent-green: #a9a589;      /* 你的引用文本绿色 */
-}
-
-/* 强制修改应用全局背景和文字颜色 */
-body, #root, .dark, .dark .bg-gray-800, .dark .bg-gray-900, .dark .bg-gray-950, [data-theme='dark'] {
-    background-color: var(--st-bg-color) !important;
-    color: var(--st-text-main) !important;
-}
-
-/* 3. 气泡大改造：引入虚线边框与酒馆布局 */
-/* 隐藏原生头像，因为酒馆风不需要这种圆角小头像 */
-.group .w-8.h-8.rounded-sm {
+/* === 2. 沉浸模式 (Zen Mode) UI 切换逻辑 === */
+/* 只有当状态为 zen-mode 时，才隐藏按钮 */
+body.zen-mode header [data-testid="new-chat-button"], 
+body.zen-mode header a[href="/"],
+body.zen-mode .flex.items-center.justify-between.p-2 button {
     display: none !important;
 }
 
-/* 消息气泡底色和边框改造 */
-.dark .dark\:bg-gray-800, .dark .group.bg-gray-950 {
-    background-color: transparent !important;
-    border: 1px dashed rgba(100, 91, 91, 0.62) !important; /* 你的阴影颜色作为虚线 */
-    border-radius: 4px !important;
-    margin-bottom: 8px !important;
-}
-
-/* 区分用户和 AI 消息的边框（还原你 JSON 里的设计） */
-/* AI 消息左侧加粗暗红边框 */
-div[data-message-author-role="assistant"] {
-    border-left: 3px solid var(--st-border-bot) !important;
-}
-/* 用户消息左侧加粗暗黄边框 */
-div[data-message-author-role="user"] {
-    border-left: 3px solid var(--st-border-user) !important;
-}
-
-/* 4. 隐藏顶部多余按钮（书签、预设等） */
-/* 针对模型选择器右侧的按钮组进行精准打击 */
-.flex.items-center.justify-center.gap-1 > button[type="button"],
-.flex.items-center.gap-2 > button[aria-haspopup="dialog"],
-[data-testid="bookmarks-button"],
-[data-testid="presets-button"] {
+body.zen-mode .flex.items-center.justify-center.gap-1 > button:not([role="combobox"]),
+body.zen-mode .flex-wrap.items-center.justify-center.gap-1 > button:not([role="combobox"]) {
     display: none !important;
-}
-
-/* 隐藏输入框内部烦人的加号等小工具（保留发送键） */
-.absolute.bottom-0.left-0.w-full form > div > div > button:not([data-testid="send-button"]) {
-    opacity: 0.2 !important; /* 不完全隐藏，降低透明度防误触，如果你想彻底隐藏改成 display: none */
-}
-
-/* 5. 输入框外观改造 */
-.dark textarea {
-    background-color: rgba(29, 33, 40, 0.9) !important;
-    border: 1px solid rgba(0, 0, 0, 0.93) !important;
-    color: var(--st-text-main) !important;
-    border-radius: 4px !important;
 }

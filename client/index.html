@@ -54,5 +54,38 @@
     <div id="root">
       <div id="loading-container"></div>
     </div>
+    <script>
+      window.addEventListener('load', () => {
+        // 默认让页面进入沉浸模式 (隐藏按钮)
+        document.body.classList.add('zen-mode');
+
+        // 创建一个触控把手
+        const toggleBtn = document.createElement('div');
+        toggleBtn.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80px;         
+          height: 15px;        
+          background-color: rgba(169, 165, 137, 0.3); /* 半透明暗绿色 */
+          border-radius: 0 0 8px 8px; 
+          z-index: 999999;     
+          cursor: pointer;
+        `;
+
+        // 点击事件：切换隐藏/显示状态
+        toggleBtn.addEventListener('click', () => {
+          document.body.classList.toggle('zen-mode');
+          if (document.body.classList.contains('zen-mode')) {
+            toggleBtn.style.backgroundColor = 'rgba(169, 165, 137, 0.3)';
+          } else {
+            toggleBtn.style.backgroundColor = 'rgba(169, 165, 137, 0.8)';
+          }
+        });
+
+        document.body.appendChild(toggleBtn);
+      });
+    </script>
   </body>
 </html>
